@@ -1,39 +1,53 @@
 <template>
-  <div id="app" ref="app">
+  <div id="app">
    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Axios from 'axios';
+import Axios from 'axios'
 export default {
   name: "app",
+   data(){
+    return {}
+  },
   created() {
     //获取项目Id和token
     this.initProjectId();
+    Axios.defaults.headers.common["Authorization"] ="bearer 087dca95-7a45-47ff-926c-6aafabd2b1df";
     this.initToken();
   },
   methods: {
     //获取项目id
     initProjectId() {
-      //let id = this.$route.params.projectId;
-      //this.$store.commit('GET_PROJECT_ID',id)
+      let id = this.$route.params.projectId;
+      //this.$store.commit("GET_PROJECT_ID", id);
       // console.log(this.$store.state.projectId)
     },
     //获取项目token验证
     initToken() {
-     // let queryParams = this.$route.query;
-      //if (queryParams.accessToken) {
-      // Axios.defaults.headers.common["Authorization"] ="bearer 12ced766-42f1-40e1-a6a0-1f81054cee3f";//沙沙
-      Axios.defaults.headers.common["Authorization"] ="bearer b752342d-9967-4d8b-a644-70fe52da9e93";//张浩
-        //Axios.defaults.headers.common["Authorization"] ="bearer 13d7685f-748c-41bd-88bd-f4cce926386d";//我的
-      //}
+      let queryParams=this.$route.query;
+      console.log(queryParams);
+      if(queryParams.accessToken){
+        Axios.defaults.headers.common["Authorization"] ="bearer " + queryParams.accessToken;
+      }
     }
   }
 };
 </script>
 
 <style>
+*{
+    box-sizing: border-box
+    }
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  cursor: default;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   font-size: 14px;

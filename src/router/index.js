@@ -12,10 +12,10 @@ const NotFound = () =>
 
 Vue.use(Router);
 const routes = [{
-        path: '',
+        path: '/bimFaceDemo',
         component: Body,
         //redirect: { name: 'CustomTrack' },
-        redirect: '/bimFaceDemo',
+        //redirect: '/bimFaceDemo',
         children: [{
             path: '/bimFaceDemo',
             name: 'bimFaceDemo',

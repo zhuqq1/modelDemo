@@ -16,14 +16,14 @@ import Axios from 'axios';
 import api from '../src/api/index';
 import Util from '../src/utils/utils';
 //引入请求方法
-import { $get, $post, $AxiosOld } from '../src/utils/request';
+import { $get, $post, $Axios } from '../src/utils/request';
 import parseUrlParams from '../src/utils/parseUrlParams';
 Vue.use(Element);
 Vue.prototype.$api = api; //全局引入api
 Vue.prototype.$parseUrl = parseUrlParams.methods.parseUrl; //注册全局解析url参数
 Vue.prototype.$get = $get;
 Vue.prototype.$post = $post;
-Vue.prototype.$AxiosOld = $AxiosOld; //为老街口返回格式不一致时使用
+Vue.prototype.$Axios = $Axios; //为老街口返回格式不一致时使用
 /*
   元素外点击
   example
@@ -38,7 +38,7 @@ window.domainNames = {
 }
 Vue.config.productionTip = true;
 /* eslint-disable no-new */
-new Vue({
+window.app = new Vue({
     el: '#app',
     router,
     store,

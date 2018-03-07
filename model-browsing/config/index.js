@@ -9,11 +9,9 @@ module.exports = {
         env: require('./prod.env'),
         index: path.resolve(__dirname, '../dist/index.html'),
         assetsRoot: path.resolve(__dirname, '../dist'),
-        //assetsSubDirectory: 'reportList',
-        //assetsPublicPath: '/resources/report/',
-        assetsSubDirectory: 'report',
+        assetsSubDirectory: 'modelBrowsing',
         assetsPublicPath: '/resources/web/5d/',
-        productionSourceMap: true,
+        productionSourceMap: false,
         // Gzip off by default as many popular static hosts such as
         // Surge or Netlify already gzip all static assets for you.
         // Before setting to `true`, make sure to:
@@ -28,30 +26,15 @@ module.exports = {
     },
     dev: {
         env: require('./dev.env'),
-        port: process.env.PORT || 3001,
+        port: process.env.PORT || 4000,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            "/view": {
-                //target: "http://192.168.92.34:8080",
+            "/api": {
                 //target: "http://192.168.79.78:9000",
-                // target: "http://bim5d-hunan.glodon.com",
-                target: "https://api.bimface.com",
-                changeOrigin: true
-            },
-            "/api/v1/projects/11776527976344046843/model/data": {
-                //target: "http://192.168.92.34:8080",
-                //target: "http://192.168.79.78:9000",
-                target: "http://bim5d-hunan.glodon.com",
-                //target: "https://api.bimface.com",
-                changeOrigin: true
-            },
-            "/api/v1/bimface/integrate": {
-                //target: "http://192.168.92.34:8080",
-                target: "http://192.168.79.78:9000",
-                //target: "http://bim5d-hunan.glodon.com",
-                //target: "https://api.bimface.com",
+                //target: "http://localhost:8080",
+                target: "http://bim5d-hunan.glodon.com/",
                 changeOrigin: true
             }
         },

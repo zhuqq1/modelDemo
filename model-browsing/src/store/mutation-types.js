@@ -1,0 +1,5 @@
+export const SHOW_LOADING = 'SHOW_LOADING'
+export const HIDE_LOADING = 'HIDE_LOADING'
+
+
+export const INIT_PROJECT_ID = 'INIT_PROJECT_ID'
