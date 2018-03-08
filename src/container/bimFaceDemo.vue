@@ -80,9 +80,6 @@ export default {
       fileIdList: "",
       //viewToken: "3dacbb33e2fc443da17e20202477c1bb",
       viewToken: "ae62dc0d59be4e3abecadf9a2f82fae0",
-      //viewToken: "ae62dc0d59be4e3abecadf9a2f82fae0",
-      // viewToken: "ae62dc0d59be4e3abecadf9a2f82fae0",
-      // viewToken: "ae62dc0d59be4e3abecadf9a2f82fae0",
       viewToken2: "",
       viewer3D: null,
       isShowViewHouse: true, //是否显示ViewHouse方向标

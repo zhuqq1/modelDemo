@@ -15,7 +15,7 @@
         "babel-polyfill": "^6.26.0",
         "echarts": "^3.7.2",
         "element-ui": "^1.4.10",
-        "moment": "^2.19.2",
+        "moment": "^2.21.0",
         "vue": "^2.5.2",
         "vue-axios": "^2.0.2",
         "vue-router": "^3.0.1",
