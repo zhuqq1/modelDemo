@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>your page title</title>
+    <!-- 引用BIMFACE的JavaScript显示组件库 -->
+    <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js" charset="utf-8"></script>
+</head>
+
+<body>
+
+    <!-- 定义DOM元素，用于在该DOM元素中显示模型或图纸 -->
+    <div id="domId" style="width:100%; height:600px"></div>
+
+    <script type="text/javascript">
+        //创建空面板
+        function creatNewPanel() {
+            (function() {
+                var panelNS = Glodon.Web.Lang.Utility.Namespace.ensureNamespace(Glodon, "Bimface.Application.UI.Panel");
+                var propertyPanel;
+                var PropertyPane2 = function PropertyPane2(viewer) {
+                    var viewerEvent = Glodon.Bimface.Viewer.Viewer3DEvent;
+                    var showProperty = function showProperty(res) {
+                        if (res.objectId) {
+                            viewer.getComponentProperty(res.objectId, function(data) {
+                                PropertyPane2.setData(data.properties);
+                            });
+                        } else {
+                            PropertyPane2.setData("");
+                        }
+                    };
+                    if (PropertyPane2) {
+                        PropertyPane2.show();
+                        viewer.addEventListener(viewerEvent.ComponentsSelectionChanged, showProperty);
+                        return PropertyPane2;
+                    }
+                    var config = new Glodon.Bimface.UI.Panel.PanelConfig();
+                    config.title = "属性2";
+                    config.css = {
+                        right: "10px",
+                        top: "10px",
+                        width: "300px",
+                        height: "416px"
+                    };
+                    var propertyPane2 = new Glodon.Bimface.UI.Panel.Panel(config);
+                    // var selectedComponents = viewer.getSelectedComponents();
+                    // for (var key in selectedComponents) {
+                    //     viewer.getComponentProperty(key, function (data) {
+                    //         propertyPanel.setData(data.properties);
+                    //     });
+                    //     break;
+                    // }
+                    // viewer.addEventListener(viewerEvent.ComponentsSelectionChanged, showProperty);
+                    propertyPane2.addEventListener("Hide", function() {
+                        viewer.removeEventListener(viewerEvent.ComponentsSelectionChanged, showProperty);
+                    });
+                    return propertyPane2;
+                };
+                panelNS.PropertyPane2 = PropertyPane2;
+            })();
+        }
+        // 指定待显示的模型或图纸（viewToken从服务端获取）
+        var viewToken = '603b9abdb08a41aa91384e0dbfda589b';
+        var viewer3D;
+        var app;
+        var ModelTree;
+
+        // 初始化显示组件
+        var options = new BimfaceSDKLoaderConfig();
+        options.viewToken = viewToken;
+        BimfaceSDKLoader.load(options, successCallback, failureCallback);
+
+        function successCallback(viewMetaData) {
+            //调用创建新面板
+            //creatNewPanel();
+            // kk();
+            if (viewMetaData.viewType == "dwgView") {
+
+                // ======== 判断是否为2D图纸 ========
+
+                // 获取DOM元素
+                var dom4Show = document.getElementById('domId');
+                var webAppConfig = new Glodon.Bimface.Application.WebApplication2DConfig();
+                webAppConfig.domElement = dom4Show;
+
+                // 创建WebApplication
+                var app = new Glodon.Bimface.Application.WebApplication2D(webAppConfig);
+
+                // 添加待显示的图纸
+                app.load(viewToken);
+
+                // 从WebApplication获取viewer2D对象
+                var viewer2D = app.getViewer();
+
+                // 调用viewer2D对象的Method，可以继续扩展功能
+                // your code
+
+            } else if (viewMetaData.viewType == "3DView") {
+
+                // ======== 判断是否为3D模型 ========
+
+                // 获取DOM元素
+                var dom4Show = document.getElementById('domId');
+                var webAppConfig = new Glodon.Bimface.Application.WebApplication3DConfig();
+                webAppConfig.domElement = dom4Show;
+
+                // 创建WebApplication
+                app = new Glodon.Bimface.Application.WebApplication3D(webAppConfig);
+
+                // 添加待显示的模型
+                app.addView(viewToken);
+
+
+
+                // 监听添加view进行中的时间，可获取添加进度
+                app.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.ViewAdded, function(progress) {
+                    viewer3D = app.getViewer();
+                    var toolbar = app.getToolbar('MainToolbar');
+                    ModelTree = app.getToolbar('ModelTree');
+                    ModelTree.element.innerHTML = "";
+                    var TreeConfig = new Glodon.Bimface.UI.Tree.TreeNodeConfig();
+                    console.log(TreeConfig);
+
+                    var btnConfig = new Glodon.Bimface.UI.Button.ButtonConfig();
+                    btnConfig.title = "隐藏";
+                    var btn = new Glodon.Bimface.UI.Button.Button(btnConfig);
+                    btn.setHtml(`<button style="width: 50px; height:50px; left: -8px; top: -8px; position: relative; color: white; font-size: 18px;background: rgba(0, 0, 0, 0);opacity: 0.6;border: none;">隐藏</button>`);
+                    btn.addClassName('btn-test');
+                    btn.addEventListener('Click', function() {
+                        viewer3D.showExclusiveComponentsByObjectData([{
+                            "categoryId": -2000032
+                        }]);
+                        viewer3D.render();
+
+                    });
+
+
+                    var btnConfig1 = new Glodon.Bimface.UI.Button.ButtonConfig();
+                    btnConfig1.title = "显示";
+                    var btn1 = new Glodon.Bimface.UI.Button.Button(btnConfig1);
+                    btn1.setHtml(`<button style="width: 50px; height:50px; left: -8px; top: -8px; position: relative; color: white; font-size: 18px;background: rgba(0, 0, 0, 0);opacity: 0.6;border: none;">显示</button>`);
+                    btn1.addClassName('btn-test');
+                    btn1.addEventListener('Click', function() {
+                        viewer3D.showAllComponents();
+                        viewer3D.render();
+
+                    });
+
+                    var btnConfig = new Glodon.Bimface.UI.Button.ButtonConfig();
+                    btnConfig.title = "自定义面板";
+                    var btn2 = new Glodon.Bimface.UI.Button.Button(btnConfig);
+                    btn2.setHtml(`<button style="width: 80px; height:50px; left: -8px; top: -8px; position: relative; color: white; font-size: 18px;background: rgba(0, 0, 0, 0);opacity: 0.6;border: none;">自定义面板</button>`);
+                    btn2.addClassName('btn-test');
+                    btn2.addEventListener('Click', function() {
+                        //var propertyPane1 = new Glodon.Bimface.Application.UI.Panel.PropertyPane1(viewer3D);
+                        // console.log(new Glodon.Bimface.Application.UI.Panel.PropertyPanel());
+                        viewer3D.render();
+
+                    });
+
+                    // add to last
+                    // toolbar.addControl(btn);
+                    toolbar.insertControl(2, btn);
+                    toolbar.insertControl(3, btn1);
+                    toolbar.insertControl(4, btn2);
+                });
+
+
+            }
+        }
+
+        function failureCallback(error) {
+            console.log(error);
+        };
+    </script>
+</body>
+
+</html>
